@@ -1,0 +1,1 @@
+console.log("mnb.js 에 애니메이션 만들 예정 . . ");

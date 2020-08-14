@@ -1,0 +1,44 @@
+.login{
+    all: unset;
+    background-color: green;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 50px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.loginButton{
+    position: absolute;
+    right: 5%;
+    top: 8%;
+}
+body{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+.modal{
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.overlay{
+    position: absolute;
+    background-color: rgba(0,0,0,0.6);
+    width: 100%;
+    height: 100%;
+
+}
+.content{
+    background-color: white;
+    padding: 50px 100px;
+    text-align: center;
+    position: relative;
+    border-radius: 50px;
+}
+.hidden {
+    display: none;
+}
