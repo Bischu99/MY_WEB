@@ -1,11 +1,12 @@
-const http = require('http');
-const url = require('url');
-const fs = require('fs');
 const template = require('C:/Users/IOT/Desktop/setInterval/lib/template.js');
 const mysql = require('mysql');
 const express = require('express');
 const app = express();
 const path = require('path');
+const bodyParser = require('body-parser')
+const { format } = require('path');
+
+
 
 var db = mysql.createConnection({
     host    : 'localhost',
@@ -19,13 +20,169 @@ db.connect(function(error) {
 }); 
 
 app.use(express.static(path.join(__dirname,'public')));
+app.use(bodyParser.urlencoded({
+    extended: false
+ }));
+ app.use(bodyParser.json());
+
 
 
 app.get('/', function(request , response) {
+        db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION){
+            if (error)throw error
+
+            var title = "자유게시판"
+            var description = "이곳은 자유게시판 입니다."
+            var id = "Free"
+            var list = template.list(WEB_DESCRIPTION);
+            var html = template.HTML(title,list,  
+                `<h2>${title}</h2>${description}`,
+                    id ,
+                );
+                return response.send(html);
+                
+            
+            });
+            //로그인 추가해야될 듯 아마 
+        
+        });
+
+
+app.get('/Comunity/:ID', function(request, response){
+    var idNUM = request.params.ID;
+        if(idNUM==="Test"){
+            db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION){
+                if (error)throw error
+                
+            
+                var title = "테스트게시판"
+                var description = "이곳은 테스트게시판 입니다."
+                var id = "Test"
+                var list = template.list(WEB_DESCRIPTION);
+                var html = template.HTML(title,list,  
+                    `<h2>${title}</h2>${description}`,
+                        id ,
+                    );
+                    return response.send(html);
+                    
+                
+                });
+        } else if (idNUM ==="Free"){
+            db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION){
+                if (error)throw error
+                
+            
+                var title = "자유게시판"
+                var description = "이곳은 자유게시판 입니다."
+                var id = "Free"
+                var list = template.list(WEB_DESCRIPTION);
+                var html = template.HTML(title,list,  
+                    `<h2>${title}</h2>${description}`,
+                        id ,
+                    );
+                    return response.send(html);
+                    
+                
+                });
+        } else {
+                db.query(`SELECT * FROM WEB_DESCRIPTION WHERE id=${idNUM};`,function(error,WEB_DESCRIPTION){
+                    if (error)throw error;
+                db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION_list){
+                    if (error)throw error;
+                    var title = WEB_DESCRIPTION[0].title;
+                    var description = WEB_DESCRIPTION[0].description;
+                    var id = WEB_DESCRIPTION[0].id;
+                    var list = template.list(WEB_DESCRIPTION_list);
+                    var html = template.HTML(title,list,  
+                        `<h2>${title}___${id}</h2>${description}<br>
+                        <a href="/Comunity/Update/${idNUM}">update</a>
+                        <a href="/Comunity/new/create">create</a><br>
+                        <a href="/Comunity/Delete/${idNUM}">Delete</a><br>`,
+                        '',"",
+                        );
+                        return response.send(html);
+                        //로그인 추가해야될 듯 아마 
+                    
+                    });
+
+        })
+    };
+});
+    
+    
+app.get('/Comunity/new/create', function(request, response){
+    db.query(`SELECT * FROM WEB_DESCRIPTION;`, function(error,WEB_DESCRIPTION){
+        if (error) throw error;
+        var title = 'Create';
+        var list = template.list(WEB_DESCRIPTION);
+        var html = template.HTML(title, list,`<h2>${title}</h2>
+        <form action="/Comunity/new/create" method="post">
+            <input type="text" name="title" value=""><br>
+            <input type="text" name="description" value=""><br>
+            <input type="submit">
+        </form>
+        `," ",
+        )
+    
+        return response.send(html);
+    });
+});
+
+
+app.post('/Comunity/new/create', function(request, response){
+            var title = request.body.title;
+            var description = request.body.description;
+            db.query(`
+            INSERT INTO WEB_DESCRIPTION (title, description) VALUES (?,?)`,[
+                title, description],function(error){
+                    if (error) throw error;
+                }
+            )
+            var html = template.HTML(title,  
+                `<h2>${title}___</h2>${description}<br>`,
+                '',"",
+                );
+                return response.send(html);
+            });
+
+app.get('/Comunity/Update/:ID', function(request, response){
+    const idNUM = request.params.ID;
+    db.query(`SELECT * FROM WEB_DESCRIPTION WHERE id=${idNUM};`,function(error,WEB_DESCRIPTION){
+        if (error)throw error
+        var title = 'Update';
+        var list = template.list(WEB_DESCRIPTION);
+        var html = template.HTML(title, list,`<h2>${title}</h2>
+        <form action="/Comunity/Update/${idNUM}" method="post">
+            <input type="text" name="title" value="${WEB_DESCRIPTION[0].title}"><br> 
+            <input type="text" name="description" value="${WEB_DESCRIPTION[0].description}"><br>
+            <input type="submit">
+        </form>`,
+        "");
+        return response.send(html);
+
+        ///post 만들어야함 업데이트 
+    });
+});
+
+app.post('/Comunity/Update/:ID', function(request, response){
+    var title = request.body.title;
+    var description = request.body.description;
+    db.query(`
+    UPDATE WEB_DESCRIPTION SET title=${title},description=${description} WHERE id=${request.params.ID};`,function(error){
+            if (error) throw error;
+        }
+    );
+    var html = template.HTML(title,  
+        `<h2>${title}___</h2>${description}<br>`,
+        '',"",
+        );
+        return response.send(html);
+    });
+
+app.get('/Comunity/Delete/:ID', function(request, response){
+    db.query(`DELETE FROM WEB_DESCRIPTION WHERE id=${request.params.ID};`);
     db.query(`SELECT * FROM WEB_DESCRIPTION`,function(error,WEB_DESCRIPTION){
         if (error)throw error
-        console.log("DB load ok ");
-    
         var title = WEB_DESCRIPTION[0].title;
         var description = WEB_DESCRIPTION[0].description;
         var id = WEB_DESCRIPTION[0].id;
@@ -38,47 +195,7 @@ app.get('/', function(request , response) {
             //로그인 추가해야될 듯 아마 
         
         });
-    });
-    
-app.get('/Comunity/:ID', function(request, response){
-    app.use(express.static(path.join(__dirname,'public')));
-    
-    var idNUM = request.params.ID;
-    
-    
-        db.query(`SELECT * FROM WEB_DESCRIPTION`,function(error,WEB_DESCRIPTION){
-        if (error)throw error
-        console.log("DB load ok ",idNUM);
-    
-        var title = WEB_DESCRIPTION[idNUM].title;
-        var description = WEB_DESCRIPTION[idNUM].description;
-        var id = WEB_DESCRIPTION[idNUM].id;
-        var list = template.list(WEB_DESCRIPTION);
-        var html = template.HTML(title,list,  
-            `<h2>${title}</h2>${description}`,
-                id ,
-            );
-            return response.send(html);
-            //로그인 추가해야될 듯 아마 
-        
-        });
-    });
-    
-
-    // db.query(`SELECT * FROM WEB_DESCRIPTION`, function(error,mainText){
-    //     if(error){
-    //         console.log("[mysql error]",error);
-    //     }
-    //     var title = '수근 웹';
-    //     var description = 'Hello';
-    //     var list = template.list(mainText);
-    //     var html = template.HTML(title, list,
-    //         `<h2>${title}</h2>${description}`,
-    //     );
-app.use(function(red, res, next){
-    next(createError(404));
 })
-
 app.listen(3000, function(){
-    console.log('Example app listening on port 3000!')
+    console.log('Example app listening on port 3000!');
 });
