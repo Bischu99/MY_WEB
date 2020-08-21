@@ -1,0 +1,61 @@
+body{
+    background-color:white;
+}
+.logoImg{
+    height: 100%;
+    width: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    overflow:hidden;
+    box-shadow: 1px 2px 4px 4px gray;
+    border-radius: 50%
+    
+
+}
+
+.slide_content{
+    width: 80px;
+    height: 80px;
+    margin-top: 5px;
+    margin-bottom: 1%;
+    background-color:white;
+    color: darkolivegreen;
+    text-align: center;
+    display: block;
+    max-width: 70%;
+    max-height: 150px;
+    
+    
+    
+}
+.slide_box {
+    width: 80%;
+    height: 80%;
+    margin-left: 10px;
+    
+}
+.hidden{
+    display: none;
+}
+.slide_btn{
+    all: unset;
+    margin-top: 5%;
+    width:1%;
+    height: 1%;
+    cursor: pointer;
+}
+.left {
+    position: absolute;
+    left: 5%;
+    top: 10%;
+}
+.right {
+    position: absolute;
+    right: 57%;
+    top: 10%;
+}
+.but_img{
+   width: 15px;
+   height: 15px;
+}
