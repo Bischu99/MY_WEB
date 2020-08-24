@@ -1,5 +1,5 @@
 .mnb_wrap{
-    width:100%; 
+    width:110%; 
     float:left;
     height:64px;
     border-bottom:5px solid #96B882 ;
@@ -46,6 +46,4 @@
     box-shadow: 2px 2px 4px 4px gray;
     padding-left: 15%;
     margin-top: 3%;
-    
-    
 }

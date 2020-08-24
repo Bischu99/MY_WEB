@@ -9,12 +9,10 @@ var Test = document.getElementById("Test_subMenu");
 
 const subMenuAdd = (subMenuName) => {
     subMenuName.classList.remove("hidden");
-    console.log("13");
 }
 
 const subMenuRemove = (subMenuName) => {
     subMenuName.classList.add("hidden");
-    console.log("12");
 }
 
 

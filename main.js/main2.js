@@ -3,9 +3,10 @@ const mysql = require('mysql');
 const express = require('express');
 const app = express();
 const path = require('path');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 const { format } = require('path');
 
+require('date-utils');
 
 
 var db = mysql.createConnection({
@@ -30,19 +31,24 @@ app.use(bodyParser.urlencoded({
 app.get('/', function(request , response) {
         db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION){
             if (error)throw error
-
-            var title = "자유게시판"
-            var description = "이곳은 자유게시판 입니다."
+            db.query(`SELECT * FROM web_title;`,function(error,web_title){
+                if (error) throw error;
+            
+            
+        
+            var title = web_title[0].name;
+            var description = web_title[0].description;
             var id = "Free"
             var list = template.list(WEB_DESCRIPTION);
             var html = template.HTML(title,list,  
-                `<h2>${title}</h2>${description}`,
+                description,
                     id ,
                 );
                 return response.send(html);
                 
             
             });
+        });
             //로그인 추가해야될 듯 아마 
         
         });
@@ -53,37 +59,45 @@ app.get('/Comunity/:ID', function(request, response){
         if(idNUM==="Test"){
             db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION){
                 if (error)throw error
+                db.query(`SELECT * FROM web_title;`,function(error,web_title){
+                    if (error) throw error;
+                
                 
             
-                var title = "테스트게시판"
-                var description = "이곳은 테스트게시판 입니다."
+                var title = web_title[1].name;
+                var description = web_title[1].description;
                 var id = "Test"
                 var list = template.list(WEB_DESCRIPTION);
                 var html = template.HTML(title,list,  
-                    `<h2>${title}</h2>${description}`,
+                    description,
                         id ,
                     );
                     return response.send(html);
                     
                 
                 });
+            });
         } else if (idNUM ==="Free"){
             db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION){
-                if (error)throw error
+                if (error) throw error;
+                db.query(`SELECT * FROM web_title;`,function(error,web_title){
+                    if (error) throw error;
+                
                 
             
-                var title = "자유게시판"
-                var description = "이곳은 자유게시판 입니다."
+                var title = web_title[0].name;
+                var description = web_title[0].description;
                 var id = "Free"
                 var list = template.list(WEB_DESCRIPTION);
                 var html = template.HTML(title,list,  
-                    `<h2>${title}</h2>${description}`,
+                    description,
                         id ,
                     );
                     return response.send(html);
                     
                 
                 });
+            });
         } else {
                 db.query(`SELECT * FROM WEB_DESCRIPTION WHERE id=${idNUM};`,function(error,WEB_DESCRIPTION){
                     if (error)throw error;
@@ -91,13 +105,13 @@ app.get('/Comunity/:ID', function(request, response){
                     if (error)throw error;
                     var title = WEB_DESCRIPTION[0].title;
                     var description = WEB_DESCRIPTION[0].description;
-                    var id = WEB_DESCRIPTION[0].id;
+                    var time = WEB_DESCRIPTION[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
                     var list = template.list(WEB_DESCRIPTION_list);
-                    var html = template.HTML(title,list,  
-                        `<h2>${title}___${id}</h2>${description}<br>
-                        <a href="/Comunity/Update/${idNUM}">update</a>
-                        <a href="/Comunity/new/create">create</a><br>
-                        <a href="/Comunity/Delete/${idNUM}">Delete</a><br>`,
+                    var html = template.HTML(`${title}      ${time}`,list,  
+                        `<br>${description}<br>
+                        <a href="/Comunity/Update/${idNUM}">수정</a><br>
+                        <a href="/Comunity/new/create">작성</a><br>
+                        <a href="/Comunity/Delete/${idNUM}">삭제</a><br>`,
                         '',"",
                         );
                         return response.send(html);
@@ -188,12 +202,10 @@ app.get('/Comunity/Delete/:ID', function(request, response){
         var id = WEB_DESCRIPTION[0].id;
         var list = template.list(WEB_DESCRIPTION);
         var html = template.HTML(title,list,  
-            `<h2>${title}</h2>${description}`,
-                id ,
+            description,id
             );
             return response.send(html);
             //로그인 추가해야될 듯 아마 
-        
         });
 })
 app.listen(3000, function(){
