@@ -38,7 +38,7 @@ app.get('/', function(request , response) {
         
             var title = web_title[0].name;
             var description = web_title[0].description;
-            var id = "Free"
+            var id = ""
             var list = template.list(WEB_DESCRIPTION);
             var html = template.HTML(title,list,  
                 description,
@@ -49,8 +49,6 @@ app.get('/', function(request , response) {
             
             });
         });
-            //로그인 추가해야될 듯 아마 
-        
         });
 
 
@@ -66,7 +64,7 @@ app.get('/Comunity/:ID', function(request, response){
             
                 var title = web_title[1].name;
                 var description = web_title[1].description;
-                var id = "Test"
+                var id = "";
                 var list = template.list(WEB_DESCRIPTION);
                 var html = template.HTML(title,list,  
                     description,
@@ -87,7 +85,7 @@ app.get('/Comunity/:ID', function(request, response){
             
                 var title = web_title[0].name;
                 var description = web_title[0].description;
-                var id = "Free"
+                var id = "";
                 var list = template.list(WEB_DESCRIPTION);
                 var html = template.HTML(title,list,  
                     description,
@@ -107,12 +105,15 @@ app.get('/Comunity/:ID', function(request, response){
                     var description = WEB_DESCRIPTION[0].description;
                     var time = WEB_DESCRIPTION[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
                     var list = template.list(WEB_DESCRIPTION_list);
-                    var html = template.HTML(`${title}      ${time}`,list,  
+                    var html = template.HTML(title,list,  
                         `<br>${description}<br>
-                        <a href="/Comunity/Update/${idNUM}">수정</a><br>
-                        <a href="/Comunity/new/create">작성</a><br>
-                        <a href="/Comunity/Delete/${idNUM}">삭제</a><br>`,
-                        '',"",
+                        <br>
+                        <br>
+                        <br>
+                        <a href="/Comunity/Update/${idNUM}">수정</a> 
+                        <a href="/Comunity/new/create">작성</a>
+                        <a href="/Comunity/Delete/${idNUM}">삭제</a>`,
+                        time,
                         );
                         return response.send(html);
                         //로그인 추가해야될 듯 아마 
@@ -127,12 +128,12 @@ app.get('/Comunity/:ID', function(request, response){
 app.get('/Comunity/new/create', function(request, response){
     db.query(`SELECT * FROM WEB_DESCRIPTION;`, function(error,WEB_DESCRIPTION){
         if (error) throw error;
-        var title = 'Create';
+        var title = '작성!';
         var list = template.list(WEB_DESCRIPTION);
-        var html = template.HTML(title, list,`<h2>${title}</h2>
+        var html = template.HTML(title, list,`
         <form action="/Comunity/new/create" method="post">
-            <input type="text" name="title" value=""><br>
-            <input type="text" name="description" value=""><br>
+            제목 : <input type="text" name="title" value=""><br>
+            내용 : <input class="descriptionTestBox" type="text" name="description" value=""><br>
             <input type="submit">
         </form>
         `," ",
@@ -144,8 +145,12 @@ app.get('/Comunity/new/create', function(request, response){
 
 
 app.post('/Comunity/new/create', function(request, response){
+    db.query(`SELECT * FROM WEB_DESCRIPTION;`, function(error,WEB_DESCRIPTION){
             var title = request.body.title;
             var description = request.body.description;
+            var list = template.list(WEB_DESCRIPTION);
+            if (!title) return title;
+            if (!description) return description;
             db.query(`
             INSERT INTO WEB_DESCRIPTION (title, description) VALUES (?,?)`,[
                 title, description],function(error){
@@ -153,19 +158,20 @@ app.post('/Comunity/new/create', function(request, response){
                 }
             )
             var html = template.HTML(title,  
-                `<h2>${title}___</h2>${description}<br>`,
+                `${description}<br>${list}`,
                 '',"",
                 );
                 return response.send(html);
             });
+        });
 
 app.get('/Comunity/Update/:ID', function(request, response){
     const idNUM = request.params.ID;
     db.query(`SELECT * FROM WEB_DESCRIPTION WHERE id=${idNUM};`,function(error,WEB_DESCRIPTION){
         if (error)throw error
-        var title = 'Update';
+        var title = '수정';
         var list = template.list(WEB_DESCRIPTION);
-        var html = template.HTML(title, list,`<h2>${title}</h2>
+        var html = template.HTML(title, list,`
         <form action="/Comunity/Update/${idNUM}" method="post">
             <input type="text" name="title" value="${WEB_DESCRIPTION[0].title}"><br> 
             <input type="text" name="description" value="${WEB_DESCRIPTION[0].description}"><br>
@@ -182,12 +188,12 @@ app.post('/Comunity/Update/:ID', function(request, response){
     var title = request.body.title;
     var description = request.body.description;
     db.query(`
-    UPDATE WEB_DESCRIPTION SET title=${title},description=${description} WHERE id=${request.params.ID};`,function(error){
+    UPDATE WEB_DESCRIPTION SET title="${title}",description="${description}" WHERE id=${request.params.ID};`,function(error){
             if (error) throw error;
         }
     );
     var html = template.HTML(title,  
-        `<h2>${title}___</h2>${description}<br>`,
+        `${description}<br>`,
         '',"",
         );
         return response.send(html);

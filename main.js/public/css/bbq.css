@@ -66,3 +66,16 @@ body{
     border-bottom:5px solid #BAAE77 ;
     border-top: 5px solid #BAAE77;
 }
+.date{
+    all: unset;
+    size: unset;
+    margin-left: 50%;
+    color: darkgray;
+}
+.hidden {
+    display: none;
+}
+.descriptionTestBox{
+    width: 70%;
+    
+}
