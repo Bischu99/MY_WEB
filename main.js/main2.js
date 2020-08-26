@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
-const { format } = require('path');
+const { format } = require('path');//모듈 설정 안해주고 사용 했을 떄 모듈 인스톨 한 파일에서 찾아서 자동 완성을 해줌
 
 require('date-utils');
 
@@ -16,7 +16,7 @@ var db = mysql.createConnection({
     database: 'mydb'
 });
 db.connect(function(error) {
-    if (error) throw error
+    if (error) return error
     console.log("DB ... OK ");
 }); 
 
@@ -30,9 +30,9 @@ app.use(bodyParser.urlencoded({
 
 app.get('/', function(request , response) {
         db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION){
-            if (error)throw error
+            if (error)return ErrorPass(error);
             db.query(`SELECT * FROM web_title;`,function(error,web_title){
-                if (error) throw error;
+                if (error) return ErrorPass(error);
             
             
         
@@ -49,16 +49,16 @@ app.get('/', function(request , response) {
             
             });
         });
-        });
+    });
 
 
 app.get('/Comunity/:ID', function(request, response){
     var idNUM = request.params.ID;
         if(idNUM==="Test"){
             db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION){
-                if (error)throw error
+                if (error)return ErrorPass(error);
                 db.query(`SELECT * FROM web_title;`,function(error,web_title){
-                    if (error) throw error;
+                    if (error) return ErrorPass(error);
                 
                 
             
@@ -77,12 +77,10 @@ app.get('/Comunity/:ID', function(request, response){
             });
         } else if (idNUM ==="Free"){
             db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION){
-                if (error) throw error;
+                if (error) return ErrorPass(error);
                 db.query(`SELECT * FROM web_title;`,function(error,web_title){
-                    if (error) throw error;
+                    if (error) return ErrorPass(error);
                 
-                
-            
                 var title = web_title[0].name;
                 var description = web_title[0].description;
                 var id = "";
@@ -98,9 +96,13 @@ app.get('/Comunity/:ID', function(request, response){
             });
         } else {
                 db.query(`SELECT * FROM WEB_DESCRIPTION WHERE id=${idNUM};`,function(error,WEB_DESCRIPTION){
-                    if (error)throw error;
+                    if (error) {
+                            return response.send("없는 페이지입니다.");
+                    }
+                    
+                     
                 db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION_list){
-                    if (error)throw error;
+                    if (error) return ErrorPass(error);
                     var title = WEB_DESCRIPTION[0].title;
                     var description = WEB_DESCRIPTION[0].description;
                     var time = WEB_DESCRIPTION[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
@@ -116,7 +118,6 @@ app.get('/Comunity/:ID', function(request, response){
                         time,
                         );
                         return response.send(html);
-                        //로그인 추가해야될 듯 아마 
                     
                     });
 
@@ -127,7 +128,7 @@ app.get('/Comunity/:ID', function(request, response){
     
 app.get('/Comunity/new/create', function(request, response){
     db.query(`SELECT * FROM WEB_DESCRIPTION;`, function(error,WEB_DESCRIPTION){
-        if (error) throw error;
+        if (error) return ErrorPass(error);
         var title = '작성!';
         var list = template.list(WEB_DESCRIPTION);
         var html = template.HTML(title, list,`
@@ -146,15 +147,17 @@ app.get('/Comunity/new/create', function(request, response){
 
 app.post('/Comunity/new/create', function(request, response){
     db.query(`SELECT * FROM WEB_DESCRIPTION;`, function(error,WEB_DESCRIPTION){
+            if (error) return ErrorPass(error);
+
             var title = request.body.title;
             var description = request.body.description;
             var list = template.list(WEB_DESCRIPTION);
-            if (!title) return title;
-            if (!description) return description;
+            // if (!title) return title;
+            // if (!description) return description;
             db.query(`
             INSERT INTO WEB_DESCRIPTION (title, description) VALUES (?,?)`,[
                 title, description],function(error){
-                    if (error) throw error;
+                    if (error) return error;
                 }
             )
             var html = template.HTML(title,  
@@ -168,7 +171,7 @@ app.post('/Comunity/new/create', function(request, response){
 app.get('/Comunity/Update/:ID', function(request, response){
     const idNUM = request.params.ID;
     db.query(`SELECT * FROM WEB_DESCRIPTION WHERE id=${idNUM};`,function(error,WEB_DESCRIPTION){
-        if (error)throw error
+        if (error)return ErrorPass(error);
         var title = '수정';
         var list = template.list(WEB_DESCRIPTION);
         var html = template.HTML(title, list,`
@@ -189,7 +192,7 @@ app.post('/Comunity/Update/:ID', function(request, response){
     var description = request.body.description;
     db.query(`
     UPDATE WEB_DESCRIPTION SET title="${title}",description="${description}" WHERE id=${request.params.ID};`,function(error){
-            if (error) throw error;
+            if (error) return ErrorPass(error);
         }
     );
     var html = template.HTML(title,  
@@ -202,7 +205,7 @@ app.post('/Comunity/Update/:ID', function(request, response){
 app.get('/Comunity/Delete/:ID', function(request, response){
     db.query(`DELETE FROM WEB_DESCRIPTION WHERE id=${request.params.ID};`);
     db.query(`SELECT * FROM WEB_DESCRIPTION`,function(error,WEB_DESCRIPTION){
-        if (error)throw error
+        if (error)return ErrorPass(error);
         var title = WEB_DESCRIPTION[0].title;
         var description = WEB_DESCRIPTION[0].description;
         var id = WEB_DESCRIPTION[0].id;
@@ -214,6 +217,18 @@ app.get('/Comunity/Delete/:ID', function(request, response){
             //로그인 추가해야될 듯 아마 
         });
 })
+
+
+function ErrorPass(error){
+    if (error) {
+        app.use(function(request, response,next){
+            return response.send('없는 페이지입니다.');
+            
+        });
+    }
+};
+
+
 app.listen(3000, function(){
-    console.log('Example app listening on port 3000!');
+    console.log('Example app listening on port 3000!')
 });
