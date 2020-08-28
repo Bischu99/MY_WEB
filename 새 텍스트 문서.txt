@@ -1,21 +1,58 @@
-root ¸¸ mysql ¸ðµç ±ÇÇÑ ÁÙ ¼ö ÀÖ´Ù´Â °Å 
-ÄÜ½ºÆ® ³²¹ßÀº ¾È ÁÁ´Ù´Â °Í 
-const º¯°æ½Ã ¼­¹ö 502¿¡·¯  ¿¡·¯ÄÚµå ¾È º¸¿©ÁÜ 
+root ë§Œ mysql ëª¨ë“  ê¶Œí•œ ì¤„ ìˆ˜ ìžˆë‹¤ëŠ” ê±° 
+ì½˜ìŠ¤íŠ¸ ë‚¨ë°œì€ ì•ˆ ì¢‹ë‹¤ëŠ” ê²ƒ 
+const ë³€ê²½ì‹œ ì„œë²„ 502ì—ëŸ¬  ì—ëŸ¬ì½”ë“œ ì•ˆ ë³´ì—¬ì¤Œ 
 
-mysql AUTO_INCREMENT 0ºÎÅÍ ½ÃÀÛÀÌ ¾È µÅ¼­ °Ë»öÇØº¸°í ¸í·É¾î Ã£¾ÆºÃÁö¸¸ ±×·¡µµ ¾È µÆÀ½ 
-Å×ÀÌºí Á¦°Å ÈÄ 
-»õ Å×ÀÌºí ¸¸µé°í ÀÚ·áÇü
- ALTER TABLE name AUTO_INCREMENT=0 ÇØÁÖ°í ÀÎÅÍ³Ý¿¡ ÀÖ´Â ¸í·É¾î ´Ù ÃÄº¸¸é¼­ Å×½ºÆ®ÇØº½ 
-°á±¹¿¡ ¾È‰Î   node.js ÄÚµå ³»ºÎ¿¡¼­ ÇØ°áÇÔ  
-id ¸¦ 0ºÎÅÍ ¹Þ¾Æ¼­ °Ô½ÃÆÇÀ¸·Î Ãâ·ÂÇÏ´Â ÄÚµå¿´´Âµ¥ 
-mysql  db.length ·Î ±æÀÌ¸¦ ±¸ÇÑ µÚ 0 ºÎÅÍ ½ÃÀÛÇØ¼­ ÇÏ³ª¾¿ ¾ÆÀÌµð ÀúÀå 
+mysql AUTO_INCREMENT 0ë¶€í„° ì‹œìž‘ì´ ì•ˆ ë¼ì„œ ê²€ìƒ‰í•´ë³´ê³  ëª…ë ¹ì–´ ì°¾ì•„ë´¤ì§€ë§Œ ê·¸ëž˜ë„ ì•ˆ ëìŒ 
+í…Œì´ë¸” ì œê±° í›„ 
+ìƒˆ í…Œì´ë¸” ë§Œë“¤ê³  ìžë£Œí˜•
+ ALTER TABLE name AUTO_INCREMENT=0 í•´ì£¼ê³  ì¸í„°ë„·ì— ìžˆëŠ” ëª…ë ¹ì–´ ë‹¤ ì³ë³´ë©´ì„œ í…ŒìŠ¤íŠ¸í•´ë´„ 
+ê²°êµ­ì— ì•ˆÂ‰   node.js ì½”ë“œ ë‚´ë¶€ì—ì„œ í•´ê²°í•¨  
+id ë¥¼ 0ë¶€í„° ë°›ì•„ì„œ ê²Œì‹œíŒìœ¼ë¡œ ì¶œë ¥í•˜ëŠ” ì½”ë“œì˜€ëŠ”ë° 
+mysql  db.length ë¡œ ê¸¸ì´ë¥¼ êµ¬í•œ ë’¤ 0 ë¶€í„° ì‹œìž‘í•´ì„œ í•˜ë‚˜ì”© ì•„ì´ë”” ì €ìž¥ 
 
-window7 ¿¡¼­´Â ÄÄÆÄÀÏ ÀÌ¸§ÀÌ¶û °°À¸¸é ½ÇÇà ¾È‰Î  Áö±Ý »ý°¢ÇØº¸¸é ´ç¿¬ÇÏÁö¸¸
-window10 ¿¡¼­ ¾²´ø ÆÄÀÏÀÌ¶ó¼­ ±êÇé¿¡¼­ °¡Áö°í ¿Ô´Âµ¥ À© 7¿¡¼­ ¾ÈµÇ°í 
-¿¡·¯¸¦ °Ë»öÇØµµ ¿øÇÏ´Â °á°ú°¡ ³ª¿ÀÁö ¾Ê¾ÒÀ½ 
+window7 ì—ì„œëŠ” ì»´íŒŒì¼ ì´ë¦„ì´ëž‘ ê°™ìœ¼ë©´ ì‹¤í–‰ ì•ˆÂ‰  ì§€ê¸ˆ ìƒê°í•´ë³´ë©´ ë‹¹ì—°í•˜ì§€ë§Œ
+window10 ì—ì„œ ì“°ë˜ íŒŒì¼ì´ë¼ì„œ ê¹ƒí—™ì—ì„œ ê°€ì§€ê³  ì™”ëŠ”ë° ìœˆ 7ì—ì„œ ì•ˆë˜ê³  
+ì—ëŸ¬ë¥¼ ê²€ìƒ‰í•´ë„ ì›í•˜ëŠ” ê²°ê³¼ê°€ ë‚˜ì˜¤ì§€ ì•Šì•˜ìŒ 
 
 
-·Î±×ÀÎº¸´Ù °Ô½ÃÆÇ¿¡ ºñ¹Ð¹øÈ£¸¦ ´Þ°í ÀÍ¸í°Ô½ÃÆÇÀ» ¸¸µé°í ½Í¾úÀ½
+ë¡œê·¸ì¸ë³´ë‹¤ ê²Œì‹œíŒì— ë¹„ë°€ë²ˆí˜¸ë¥¼ ë‹¬ê³  ìµëª…ê²Œì‹œíŒì„ ë§Œë“¤ê³  ì‹¶ì—ˆìŒ
 
-¼­¹ö ¿¡·¯ ÄÚµå Ã³¸®ÇÏ·Á°í ÇßÁö¸¸ ºñµ¿±â½Ä µ¿±â½ÄÀ» ¿Ïº®ÇÏ°Ô ¾ËÁö ¸øÇÏ¿© 
-´Ù½Ã Ã£¾ÆºÁ¼­ °íÄ¡´Â Áß  
+ì„œë²„ ì—ëŸ¬ ì½”ë“œ ì²˜ë¦¬í•˜ë ¤ê³  í–ˆì§€ë§Œ ë¹„ë™ê¸°ì‹ ë™ê¸°ì‹ì„ ì™„ë²½í•˜ê²Œ ì•Œì§€ ëª»í•˜ì—¬ 
+ë‹¤ì‹œ ì°¾ì•„ë´ì„œ ê³ ì¹˜ëŠ” ì¤‘  
+
+
+CREATE TABLE `WEB_DB` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  `profile` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+
+CREATE TABLE `WEB_DESCRIPTION` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `title` varchar(30) NOT NULL,
+  `description` text,
+  `created` datetime NOT NULL,
+  `author_id` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `WEB_TITLE` (
+ `name` varchar(30) NOT NULL,
+ `desxription` text
+)
+
+
+ CREATE TABLE 'WEB_DESCRIPTION' (
+id int(11) NOT NULL AUTO_INCREMENT,title varchar(30) NOT NULL,description text NOT NULL,created NOT NULL TIMESTAMP DEFAULT
+ CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,author_id int(10) DEFAULT NULL,PRIMARY KEY (id));
+
+
+CREATE TABLE WEB_DESCRIPTION (
+id int NOT NULL AUTO_INCREMENT,
+title varchar(30) NOT NULL,
+description text NOT NULL,
+created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+PRIMARY KEY (`id`));
+
