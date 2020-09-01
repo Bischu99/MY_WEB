@@ -1,4 +1,4 @@
-const template = require('C:/Users/IOT/Desktop/setInterval/lib/template.js');
+const template = require('C:/Users/kgg50/Desktop/MY_WEB-master/lib/template.js');
 const mysql = require('mysql');
 const express = require('express');
 const app = express();
@@ -16,7 +16,7 @@ var db = mysql.createConnection({
     database: 'mydb'
 });
 db.connect(function(error) {
-    if (error) return error
+    if (error) throw error;
     console.log("DB ... OK ");
 }); 
 
@@ -30,9 +30,9 @@ app.use(bodyParser.urlencoded({
 
 app.get('/', function(request , response) {
         db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION){
-            if (error)return ErrorPass(error);
+            if (error)return response.send("잘못된 데이터 요청입니다.");
             db.query(`SELECT * FROM web_title;`,function(error,web_title){
-                if (error) return ErrorPass(error);
+                if (error) return response.send("잘못된 데이터 요청입니다.");
             
             
         
@@ -56,9 +56,9 @@ app.get('/Comunity/:ID', function(request, response){
     var idNUM = request.params.ID;
         if(idNUM==="Test"){
             db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION){
-                if (error)return ErrorPass(error);
+                if (error)return response.send("잘못된 데이터 요청입니다.");
                 db.query(`SELECT * FROM web_title;`,function(error,web_title){
-                    if (error) return ErrorPass(error);
+                    if (error) return response.send("잘못된 데이터 요청입니다.");
                 
                 
             
@@ -77,9 +77,9 @@ app.get('/Comunity/:ID', function(request, response){
             });
         } else if (idNUM ==="Free"){
             db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION){
-                if (error) return ErrorPass(error);
+                if (error) return response.send("잘못된 데이터 요청입니다.");
                 db.query(`SELECT * FROM web_title;`,function(error,web_title){
-                    if (error) return ErrorPass(error);
+                    if (error) return response.send("잘못된 데이터 요청입니다.");
                 
                 var title = web_title[0].name;
                 var description = web_title[0].description;
@@ -102,7 +102,7 @@ app.get('/Comunity/:ID', function(request, response){
                     
                      
                 db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION_list){
-                    if (error) return ErrorPass(error);
+                    if (error) return response.send("잘못된 데이터 요청입니다.");
                     var title = WEB_DESCRIPTION[0].title;
                     var description = WEB_DESCRIPTION[0].description;
                     var time = WEB_DESCRIPTION[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
@@ -128,13 +128,14 @@ app.get('/Comunity/:ID', function(request, response){
     
 app.get('/Comunity/new/create', function(request, response){
     db.query(`SELECT * FROM WEB_DESCRIPTION;`, function(error,WEB_DESCRIPTION){
-        if (error) return ErrorPass(error);
+        if (error) return response.send("잘못된 데이터 요청입니다.");
         var title = '작성!';
         var list = template.list(WEB_DESCRIPTION);
         var html = template.HTML(title, list,`
         <form action="/Comunity/new/create" method="post">
             제목 : <input type="text" name="title" value=""><br>
             내용 : <input class="descriptionTestBox" type="text" name="description" value=""><br>
+            비밀번호 : <input type="text" name="passWord" value=""><br>
             <input type="submit">
         </form>
         `," ",
@@ -146,38 +147,41 @@ app.get('/Comunity/new/create', function(request, response){
 
 
 app.post('/Comunity/new/create', function(request, response){
-    db.query(`SELECT * FROM WEB_DESCRIPTION;`, function(error,WEB_DESCRIPTION){
-            if (error) return ErrorPass(error);
+    if (request.body.title == ""){
+        return response.send("공백은 제목으로 할 수 없습니다.");
+    }
+    var title = request.body.title;
+    var description = request.body.description;
+    var passWord = request.body.passWord;
 
-            var title = request.body.title;
-            var description = request.body.description;
-            var list = template.list(WEB_DESCRIPTION);
-            // if (!title) return title;
-            // if (!description) return description;
-            db.query(`
-            INSERT INTO WEB_DESCRIPTION (title, description) VALUES (?,?)`,[
-                title, description],function(error){
-                    if (error) return error;
-                }
-            )
-            var html = template.HTML(title,  
-                `${description}<br>${list}`,
-                '',"",
-                );
-                return response.send(html);
+    db.query(`
+    INSERT INTO WEB_DESCRIPTION (title, description ,passWord) VALUES (?,?,?)`,[
+        title, description,passWord],function(error){
+            if (error) return response.send("잘못된 데이터 요청입니다.");
+            db.query(`SELECT * FROM WEB_DESCRIPTION;`, function(error,WEB_DESCRIPTION){
+                if (error) return response.send("잘못된 데이터 요청입니다.");
+                var time = WEB_DESCRIPTION[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
+                var list = template.list(WEB_DESCRIPTION);
+                var html = template.HTML(title,  
+                    `${description}<br>${list}`,
+                    '',time,
+                    );
+                    return response.send(html);
+                });
             });
         });
 
 app.get('/Comunity/Update/:ID', function(request, response){
     const idNUM = request.params.ID;
     db.query(`SELECT * FROM WEB_DESCRIPTION WHERE id=${idNUM};`,function(error,WEB_DESCRIPTION){
-        if (error)return ErrorPass(error);
+        if (error)return response.send("잘못된 데이터 요청입니다.");
         var title = '수정';
         var list = template.list(WEB_DESCRIPTION);
         var html = template.HTML(title, list,`
         <form action="/Comunity/Update/${idNUM}" method="post">
-            <input type="text" name="title" value="${WEB_DESCRIPTION[0].title}"><br> 
-            <input type="text" name="description" value="${WEB_DESCRIPTION[0].description}"><br>
+            제목 : <input type="text" name="title" value="${WEB_DESCRIPTION[0].title}"><br> 
+            내용 : <input type="text" name="description" value="${WEB_DESCRIPTION[0].description}"><br>
+            비밀번호 : <input type="text" name="passWord" value=""><br>
             <input type="submit">
         </form>`,
         "");
@@ -188,47 +192,78 @@ app.get('/Comunity/Update/:ID', function(request, response){
 });
 
 app.post('/Comunity/Update/:ID', function(request, response){
+    if (request.body.title == ""){
+        return response.send("공백은 제목으로 할 수 없습니다.");
+    }
     var title = request.body.title;
     var description = request.body.description;
-    db.query(`
-    UPDATE WEB_DESCRIPTION SET title="${title}",description="${description}" WHERE id=${request.params.ID};`,function(error){
-            if (error) return ErrorPass(error);
+    var passWord = request.body.passWord;
+    db.query(`SELECT * FROM WEB_DESCRIPTION WHERE id=${request.params.ID}`,function(error,WEB_passWord){
+        if (passWord == WEB_passWord[0].passWord){
+            db.query(`
+                UPDATE WEB_DESCRIPTION SET title="${title}",description="${description}" WHERE id=${request.params.ID};`,function(error){
+                if (error) return response.send("잘못된 데이터 요청입니다.");
+                db.query(`SELECT * FROM WEB_DESCRIPTION`,function(error,WEB_list){
+                    var time = WEB_passWord[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
+                    var list = template.list(WEB_list);
+                    var html = template.HTML(title,  
+                        list,`${description}<br>`,
+                        time,
+                        );
+                        return response.send(html);
+                });
+            });
+        } else {
+            return response.send("비밀번호가 틀렸습니다.");
         }
-    );
-    var html = template.HTML(title,  
-        `${description}<br>`,
-        '',"",
-        );
-        return response.send(html);
     });
+});
 
 app.get('/Comunity/Delete/:ID', function(request, response){
-    db.query(`DELETE FROM WEB_DESCRIPTION WHERE id=${request.params.ID};`);
-    db.query(`SELECT * FROM WEB_DESCRIPTION`,function(error,WEB_DESCRIPTION){
-        if (error)return ErrorPass(error);
-        var title = WEB_DESCRIPTION[0].title;
-        var description = WEB_DESCRIPTION[0].description;
-        var id = WEB_DESCRIPTION[0].id;
-        var list = template.list(WEB_DESCRIPTION);
-        var html = template.HTML(title,list,  
-            description,id
-            );
+    db.query(`SELECT * FROM WEB_DESCRIPTION WHERE id=${request.params.ID};`, function(error,WEB_DESCRIPTION){  
+        const idNUM = request.params.ID;
+        if (error)return response.send("잘못된 데이터 요청입니다.");
+        db.query(`SELECT * FROM WEB_DESCRIPTION`,function(error,WEB_list){
+            if (error) return response.send("잘못된 데이터 요청입니다.");
+            var title = WEB_DESCRIPTION[0].title;
+            var description = WEB_DESCRIPTION[0].description;
+            var time = WEB_DESCRIPTION[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
+            var list = template.list(WEB_list);
+            var html = template.HTML(title,list,  
+                `${description}<br>
+                <br>
+                <br>
+                <form action="/Comunity/Delete/${idNUM}" method="post">
+                    비밀번호 : <input type="text" name="passWord" value=""><br>
+                    <input type="submit">
+                </from>`,time
+                );
             return response.send(html);
-            //로그인 추가해야될 듯 아마 
         });
-})
+    });
+});
+
+app.post(`/Comunity/Delete/:ID`, function(request,response){
+    var passWord = request.body.passWord;
+    db.query(`SELECT passWord FROM WEB_DESCRIPTION WHERE id=${request.params.ID}`,function(error,WEB_passWord){
+        if (passWord == WEB_passWord[0].passWord){
+            db.query(`DELETE FROM WEB_DESCRIPTION WHERE id=${request.params.ID};`);
+            db.query(`SELECT * FROM WEB_DESCRIPTION`, function(error,WEB_DESCRIPTION){
+                if (error) return response.send("잘못된 데이터 요청입니다."); 
+                var title = WEB_DESCRIPTION[0].title;
+                var description = WEB_DESCRIPTION[0].description;
+                var time = WEB_DESCRIPTION[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
+                var list = template.list(WEB_DESCRIPTION);
+                var html = template.HTML(title,list,description,time)
+                return response.send(html);                
+            });
+        } else {
+            return response.send("비밀번호가 틀렸습니다.");
+        }
+    });
+});
 
 
-function ErrorPass(error){
-    if (error) {
-        app.use(function(request, response,next){
-            return response.send('없는 페이지입니다.');
-            
-        });
-    }
-};
-
-
-app.listen(3000, function(){
-    console.log('Example app listening on port 3000!')
+app.listen(80,'110.5.188.62', function(){
+    console.log('Example app listening on port 80!')
 });
