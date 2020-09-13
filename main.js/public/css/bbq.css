@@ -1,6 +1,15 @@
-body{
-    background-color:white;
+html{
+    background-color: white;
+    max-width: 1920px;
+    max-height: 1200px;
 }
+body{
+    max-width: 1920px;
+    max-height: 1200px;
+}
+/* body{
+    background-color:white;
+} */
 .logoImg{
     height: 100%;
     width: 100%;
@@ -10,29 +19,23 @@ body{
     overflow:hidden;
     box-shadow: 1px 2px 4px 4px gray;
     border-radius: 50%
-    
-
 }
 
 .slide_content{
     width: 80px;
     height: 80px;
-    margin-top: 5px;
+    margin-top: 16px;
     margin-bottom: 1%;
     background-color:white;
     color: darkolivegreen;
     text-align: center;
     display: block;
-    max-width: 70%;
-    max-height: 150px;
-    
-    
-    
+    /* max-width: 70%;
+    max-height: 150px; */
 }
 .slide_box {
-    width: 80%;
-    height: 80%;
-    margin-left: 10px;
+    margin-left: 90%;
+    position: relative;
     
 }
 .hidden{
@@ -59,23 +62,36 @@ body{
    width: 15px;
    height: 15px;
 }
+.main_text_box{
+    /* position: static; */
+    margin-top: 3%;
+    display: block;
+    border-bottom: 5px solid black ;
+    border-top: 5px solid black;
+    border-left: 5px solid black;
+    border-right: 5px solid black;
+}
 .mainTitle{
-    width: 100%;
-    margin-top: 8%;
     
-    border-bottom:5px solid #BAAE77 ;
-    border-top: 5px solid #BAAE77;
+    width: 100%;
+    margin-left: 30%;
 }
 .date{
-    all: unset;
-    size: unset;
-    margin-left: 50%;
-    color: darkgray;
+    position: relative;
+    margin-top: 5%;
+    margin-left: 30%;
+    color: gray;
 }
 .hidden {
     display: none;
 }
-.descriptionTestBox{
-    width: 70%;
-    
+.title_Size{
+    width: 400px;
+    height: 35px;
+    /* max-width: 400px;
+    max-height: 35px; */
 }
+/* .descriptionTestBox{
+    width: 70%;
+    background-color: white;
+} */

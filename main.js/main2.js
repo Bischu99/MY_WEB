@@ -15,7 +15,7 @@ var db = mysql.createConnection({
     password: 'vusgkfq12!@',
     database: 'mydb'
 });
-db.connect(function(error) {
+db.connect(function(error){
     if (error) throw error;
     console.log("DB ... OK ");
 }); 
@@ -33,16 +33,12 @@ app.get('/', function(request , response) {
             if (error)return response.send("잘못된 데이터 요청입니다.");
             db.query(`SELECT * FROM web_title;`,function(error,web_title){
                 if (error) return response.send("잘못된 데이터 요청입니다.");
-            
-            
-        
             var title = web_title[0].name;
             var description = web_title[0].description;
-            var id = ""
+            var id = "";
             var list = template.list(WEB_DESCRIPTION);
             var html = template.HTML(title,list,  
-                description,
-                    id ,
+                description,`<br>${id}`
                 );
                 return response.send(html);
                 
@@ -68,7 +64,7 @@ app.get('/Comunity/:ID', function(request, response){
                 var list = template.list(WEB_DESCRIPTION);
                 var html = template.HTML(title,list,  
                     description,
-                        id ,
+                    `<br>${id}`,
                     );
                     return response.send(html);
                     
@@ -87,7 +83,7 @@ app.get('/Comunity/:ID', function(request, response){
                 var list = template.list(WEB_DESCRIPTION);
                 var html = template.HTML(title,list,  
                     description,
-                        id ,
+                    `<br>${id}`,
                     );
                     return response.send(html);
                     
