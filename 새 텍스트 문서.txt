@@ -56,3 +56,12 @@ description text NOT NULL,
 created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 PRIMARY KEY (`id`));
 
+앞으로 커밋할 때 수정한 내용 넣기 
+
+내가 봐도 보기 편한 코드 생각하면서 짜기 
+
+css 연관성 있게 적기 
+
+div 남용 금지 
+
+유지보수 . 
