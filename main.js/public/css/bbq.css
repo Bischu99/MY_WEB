@@ -82,6 +82,14 @@ body{
     margin-left: 30%;
     color: gray;
 }
+.description{
+    width: 45%;
+    height: 45%;
+}
+.descriptionBox{
+    width: 70%;
+    height: 300px;
+}
 .hidden {
     display: none;
 }

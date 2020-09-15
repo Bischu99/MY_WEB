@@ -1,4 +1,4 @@
-const template = require('C:/Users/kgg50/Desktop/MY_WEB-master/lib/template.js');
+const template = require('C:/Users/IOT/Desktop/123/MY_WEB-master/lib/template.js');
 const mysql = require('mysql');
 const express = require('express');
 const app = express();
@@ -104,7 +104,7 @@ app.get('/Comunity/:ID', function(request, response){
                     var time = WEB_DESCRIPTION[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
                     var list = template.list(WEB_DESCRIPTION_list);
                     var html = template.HTML(title,list,  
-                        `<br>${description}<br>
+                        `${description}<br>
                         <br>
                         <br>
                         <br>
@@ -130,7 +130,8 @@ app.get('/Comunity/new/create', function(request, response){
         var html = template.HTML(title, list,`
         <form action="/Comunity/new/create" method="post">
             제목 : <input type="text" name="title" value=""><br>
-            내용 : <input class="descriptionTestBox" type="text" name="description" value=""><br>
+            내용 :<br>
+             <input onkeyup="enterKey();" class="descriptionBox" name="description" type="text" value=""><br>
             비밀번호 : <input type="text" name="passWord" value=""><br>
             <input type="submit">
         </form>
@@ -155,14 +156,24 @@ app.post('/Comunity/new/create', function(request, response){
         title, description,passWord],function(error){
             if (error) return response.send("잘못된 데이터 요청입니다.");
             db.query(`SELECT * FROM WEB_DESCRIPTION;`, function(error,WEB_DESCRIPTION){
-                if (error) return response.send("잘못된 데이터 요청입니다.");
-                var time = WEB_DESCRIPTION[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
-                var list = template.list(WEB_DESCRIPTION);
-                var html = template.HTML(title,  
-                    `${description}<br>${list}`,
-                    '',time,
-                    );
-                    return response.send(html);
+                db.query(`SELECT * FROM WEB_DESCRIPTION WHERE description="${description}" AND title="${title}"`,function(error,WEB_ID){
+
+                    if (error) return response.send("잘못된 데이터 요청입니다.");
+                    var idNum = WEB_ID[0].id;
+                    var time = WEB_DESCRIPTION[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
+                    var list = template.list(WEB_DESCRIPTION);
+                    var html = template.HTML(title,  
+                        list,`${description}<br>
+                        <br>
+                        <br>
+                        <br>
+                        <a href="/Comunity/Update/${idNum}">수정</a> 
+                        <a href="/Comunity/new/create">작성</a>
+                        <a href="/Comunity/Delete/${idNum}">삭제</a>`,
+                        time,
+                        );
+                        return response.send(html);
+                    });
                 });
             });
         });
@@ -176,14 +187,14 @@ app.get('/Comunity/Update/:ID', function(request, response){
         var html = template.HTML(title, list,`
         <form action="/Comunity/Update/${idNUM}" method="post">
             제목 : <input type="text" name="title" value="${WEB_DESCRIPTION[0].title}"><br> 
-            내용 : <input type="text" name="description" value="${WEB_DESCRIPTION[0].description}"><br>
+            내용 :<br>
+            <input onkeyup="enterKey();" class="descriptionBox" type="text" name="description" value="${WEB_DESCRIPTION[0].description}"><br>
             비밀번호 : <input type="text" name="passWord" value=""><br>
             <input type="submit">
         </form>`,
         "");
         return response.send(html);
 
-        ///post 만들어야함 업데이트 
     });
 });
 
@@ -191,6 +202,7 @@ app.post('/Comunity/Update/:ID', function(request, response){
     if (request.body.title == ""){
         return response.send("공백은 제목으로 할 수 없습니다.");
     }
+    var idNum = request.params.ID;
     var title = request.body.title;
     var description = request.body.description;
     var passWord = request.body.passWord;
@@ -203,7 +215,13 @@ app.post('/Comunity/Update/:ID', function(request, response){
                     var time = WEB_passWord[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
                     var list = template.list(WEB_list);
                     var html = template.HTML(title,  
-                        list,`${description}<br>`,
+                        list,`${description}<br>
+                        <br>
+                        <br>
+                        <br>
+                        <a href="/Comunity/Update/${idNum}">수정</a> 
+                        <a href="/Comunity/new/create">작성</a>
+                        <a href="/Comunity/Delete/${idNum}">삭제</a>`,
                         time,
                         );
                         return response.send(html);
@@ -260,6 +278,6 @@ app.post(`/Comunity/Delete/:ID`, function(request,response){
 });
 
 
-app.listen(80,'110.5.188.62', function(){
+app.listen(80,'192.168.0.160', function(){
     console.log('Example app listening on port 80!')
 });
