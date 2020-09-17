@@ -131,10 +131,11 @@ app.get('/Comunity/new/create', function(request, response){
         <form action="/Comunity/new/create" method="post">
             제목 : <input type="text" name="title" value=""><br>
             내용 :<br>
-             <input onkeyup="enterKey();" class="descriptionBox" name="description" type="text" value=""><br>
+            <textarea  wrap="hard" id="TextEnter" class="descriptionBox" name="description" type="textarea" value=""></textarea><br>
             비밀번호 : <input type="text" name="passWord" value=""><br>
-            <input type="submit">
+            <input onclick="TextBoxElnter();" type="submit">
         </form>
+        <script type="text/javascript" src="/js/TextBox.js"></script>
         `," ",
         )
     
@@ -188,7 +189,7 @@ app.get('/Comunity/Update/:ID', function(request, response){
         <form action="/Comunity/Update/${idNUM}" method="post">
             제목 : <input type="text" name="title" value="${WEB_DESCRIPTION[0].title}"><br> 
             내용 :<br>
-            <input onkeyup="enterKey();" class="descriptionBox" type="text" name="description" value="${WEB_DESCRIPTION[0].description}"><br>
+            <textarea wrap="hard" class="descriptionBox" type="textarea" name="description" >${WEB_DESCRIPTION[0].description}</textarea><br>
             비밀번호 : <input type="text" name="passWord" value=""><br>
             <input type="submit">
         </form>`,
