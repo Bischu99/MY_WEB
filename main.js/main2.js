@@ -131,7 +131,7 @@ app.get('/Comunity/new/create', function(request, response){
             내용 :<br>
             <textarea  wrap="hard" id="TextEnter" class="descriptionBox" name="description" type="textarea"></textarea><br>
             비밀번호 : <input type="text" name="passWord" value=""><br>
-            <input onclick="TextBoxElnter();" type="submit">
+            <input type="submit">
         </form>
         <script type="text/javascript" src="/js/TextBox.js"></script>
         `," ",
@@ -206,7 +206,7 @@ app.post('/Comunity/Update/:ID', function(request, response){
     }
     var idNum = request.params.ID;
     var title = request.body.title;
-    var description = request.body.description;
+    var description = request.body.description.replace(/\r\n/g,'<br>');
     var passWord = request.body.passWord;
     db.query(`SELECT * FROM WEB_DESCRIPTION WHERE id=${request.params.ID}`,function(error,WEB_passWord){
         if (passWord == WEB_passWord[0].passWord){

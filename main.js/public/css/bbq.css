@@ -1,5 +1,9 @@
 html{
-    background-color: white;
+    background: #8e9eab;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    
+
     max-width: 1920px;
     max-height: 1200px;
 }
@@ -66,6 +70,7 @@ body{
     /* position: static; */
     margin-top: 3%;
     display: block;
+    background-color: white;
     border-bottom: 5px solid black ;
     border-top: 5px solid black;
     border-left: 5px solid black;
@@ -74,7 +79,7 @@ body{
 .mainTitle{
     
     width: 100%;
-    margin-left: 30%;
+    margin-left: 10%;
 }
 .date{
     position: relative;
@@ -83,8 +88,8 @@ body{
     color: gray;
 }
 .description{
-    width: 45%;
-    height: 45%;
+    width: 100%;
+    height: 100%;
 }
 .descriptionBox{
     width: 70%;
