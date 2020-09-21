@@ -92,11 +92,9 @@ app.get('/Comunity/:ID', function(request, response){
             });
         } else {
                 db.query(`SELECT * FROM WEB_DESCRIPTION WHERE id=${idNUM};`,function(error,WEB_DESCRIPTION){
-                    if (error) {
-                            return response.send("없는 페이지입니다.");
-                    }
+                    if (error || WEB_DESCRIPTION == []) return response.send("없는 페이지입니다.");
+                    if (WEB_DESCRIPTION === undefined || WEB_DESCRIPTION.length == 0) return response.send("없는 페이지입니다.");
                     
-                     
                 db.query(`SELECT * FROM WEB_DESCRIPTION;`,function(error,WEB_DESCRIPTION_list){
                     if (error) return response.send("잘못된 데이터 요청입니다.");
                     var title = WEB_DESCRIPTION[0].title;
@@ -131,7 +129,7 @@ app.get('/Comunity/new/create', function(request, response){
         <form action="/Comunity/new/create" method="post">
             제목 : <input type="text" name="title" value=""><br>
             내용 :<br>
-            <textarea  wrap="hard" id="TextEnter" class="descriptionBox" name="description" type="textarea" value=""></textarea><br>
+            <textarea  wrap="hard" id="TextEnter" class="descriptionBox" name="description" type="textarea"></textarea><br>
             비밀번호 : <input type="text" name="passWord" value=""><br>
             <input onclick="TextBoxElnter();" type="submit">
         </form>
@@ -149,8 +147,9 @@ app.post('/Comunity/new/create', function(request, response){
         return response.send("공백은 제목으로 할 수 없습니다.");
     }
     var title = request.body.title;
-    var description = request.body.description;
+    var description = request.body.description.replace(/\r\n/g,'<br>');
     var passWord = request.body.passWord;
+
 
     db.query(`
     INSERT INTO WEB_DESCRIPTION (title, description ,passWord) VALUES (?,?,?)`,[
@@ -158,8 +157,8 @@ app.post('/Comunity/new/create', function(request, response){
             if (error) return response.send("잘못된 데이터 요청입니다.");
             db.query(`SELECT * FROM WEB_DESCRIPTION;`, function(error,WEB_DESCRIPTION){
                 db.query(`SELECT * FROM WEB_DESCRIPTION WHERE description="${description}" AND title="${title}"`,function(error,WEB_ID){
-
-                    if (error) return response.send("잘못된 데이터 요청입니다.");
+                    if (error ) return response.send("잘못된 데이터 요청입니다.");
+                    if (WEB_ID.length == 0)return response.send("잘못된 데이터 요청입니다.");
                     var idNum = WEB_ID[0].id;
                     var time = WEB_DESCRIPTION[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
                     var list = template.list(WEB_DESCRIPTION);
@@ -183,13 +182,15 @@ app.get('/Comunity/Update/:ID', function(request, response){
     const idNUM = request.params.ID;
     db.query(`SELECT * FROM WEB_DESCRIPTION WHERE id=${idNUM};`,function(error,WEB_DESCRIPTION){
         if (error)return response.send("잘못된 데이터 요청입니다.");
+        if (WEB_DESCRIPTION.length == 0)return response.send("잘못된 데이터 요청입니다.");
         var title = '수정';
+        var description = WEB_DESCRIPTION[0].description.replace(/<br>/g,'\n');
         var list = template.list(WEB_DESCRIPTION);
         var html = template.HTML(title, list,`
         <form action="/Comunity/Update/${idNUM}" method="post">
             제목 : <input type="text" name="title" value="${WEB_DESCRIPTION[0].title}"><br> 
             내용 :<br>
-            <textarea wrap="hard" class="descriptionBox" type="textarea" name="description" >${WEB_DESCRIPTION[0].description}</textarea><br>
+            <textarea wrap="hard" class="descriptionBox" type="textarea" name="description" >${description}</textarea><br>
             비밀번호 : <input type="text" name="passWord" value=""><br>
             <input type="submit">
         </form>`,
@@ -240,6 +241,7 @@ app.get('/Comunity/Delete/:ID', function(request, response){
         if (error)return response.send("잘못된 데이터 요청입니다.");
         db.query(`SELECT * FROM WEB_DESCRIPTION`,function(error,WEB_list){
             if (error) return response.send("잘못된 데이터 요청입니다.");
+            if (WEB_DESCRIPTION.length == 0)return response.send("잘못된 데이터 요청입니다.");
             var title = WEB_DESCRIPTION[0].title;
             var description = WEB_DESCRIPTION[0].description;
             var time = WEB_DESCRIPTION[0].created.toFormat('YYYY-MM-DD HH24:MI:SS');
