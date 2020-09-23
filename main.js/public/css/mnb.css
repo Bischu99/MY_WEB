@@ -1,19 +1,15 @@
 
 .mnb_wrap{
-    width:100%; 
-    /* float:left; */
-    height:64px;
-    border-bottom:5px solid black ;
-    border-top: 5px solid black;
-    display: block;
-}
-.mnb_list{
-    width:100%;
-    float:left;
-    margin-top:1px;
+    all: unset;
+    position:fixed;
+    margin-top: -12%;
     background-color:white;
-
+    border-bottom: solid black 5px;
+    width: 1920px;
+    height: 80px;
+    left: 0px;
 }
+
 .mnb_list li{
     all: unset;
     float:left;
@@ -23,7 +19,7 @@
     line-height: 64px;
     margin-left:54px;
     font-size:16px;
-    position:relative;
+    
 }
 .mnb_list li:first-child{
     margin-left:0;
@@ -31,7 +27,7 @@
 .mnb_list li a{
     color: black;
     float:left;
-    position: relative;
+    
 }
 .white{
     color: white;
@@ -41,11 +37,10 @@
 }
 .SubMenu_BOX{
     float:left;
-    position:relative;
     width: 100%;
     height: 400%;
     background: white;
     box-shadow: 2px 2px 4px 4px gray;
     padding-left: 15%;
-    margin-top: 3%;
+    margin-top: -3%;
 }

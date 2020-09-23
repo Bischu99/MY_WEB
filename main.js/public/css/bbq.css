@@ -1,16 +1,17 @@
 html{
-    background: #8e9eab;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #F1F2B5;  /* fallback for old browsers */
+    background: -webkit-linear-gradient(to bottom, #135058, #F1F2B5);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to bottom, #135058, #F1F2B5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
     
+    height: 1500px;
 
     max-width: 1920px;
-    max-height: 1200px;
+
 }
-body{
+/* body{
     max-width: 1920px;
     max-height: 1200px;
-}
+} */
 /* body{
     background-color:white;
 } */
@@ -67,17 +68,10 @@ body{
    height: 15px;
 }
 .main_text_box{
-    /* position: static; */
-    margin-top: 3%;
-    display: block;
+    margin-top: 12%;
     background-color: white;
-    border-bottom: 5px solid black ;
-    border-top: 5px solid black;
-    border-left: 5px solid black;
-    border-right: 5px solid black;
 }
 .mainTitle{
-    
     width: 100%;
     margin-left: 10%;
 }
